@@ -76,6 +76,8 @@ const UI_TEXT = {
 };
 
 function App() {
+  type Lang = 'en' | 'zh';
+
   const [hasStarted, setHasStarted] = useState(false);
   const [currentShape, setCurrentShape] = useState<ShapeType>(ShapeType.NEBULA);
   const [isAutoMorph, setIsAutoMorph] = useState(false);
@@ -83,7 +85,15 @@ function App() {
   const [handFactor, setHandFactor] = useState<number>(1.0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMusicLoaded, setIsMusicLoaded] = useState(false);
-  const [lang, setLang] = useState<'en' | 'zh'>('en');
+  const [lang, setLang] = useState<Lang>(() => {
+    try {
+      const saved = localStorage.getItem('lang');
+      if (saved === 'en' || saved === 'zh') return saved;
+    } catch {
+      return 'zh';
+    }
+    return 'zh';
+  });
   
   // Menu Visibility
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -139,6 +149,17 @@ function App() {
     }, 10000); 
     return () => clearInterval(interval);
   }, [isAutoMorph, currentShape]);
+
+  useEffect(() => {
+    const htmlLang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.documentElement.lang = htmlLang;
+
+    try {
+      localStorage.setItem('lang', lang);
+    } catch {
+      return;
+    }
+  }, [lang]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
