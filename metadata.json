@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Cosmic Ink Galaxy",
+  "description": "A 3D interactive particle system blending ink-wash aesthetics with cosmic geometry. Features hand tracking via MediaPipe and audio-reactive morphing.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
